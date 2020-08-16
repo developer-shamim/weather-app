@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="write-city" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="submit-city" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="city-name">Dhaka</h1>
+            <h3><span id="temp" ></span>&deg;C</span></h3>
+            <p> <i>(Feels like </i><i id="feels-like"></i><i>&deg;C)</i></p>
+            <h1 id="sky" class="lead"> </h1> 
+            <p id="sky-condition"> </p>
+            <p> <span>Humidity:</span> <span id="humidity"></span> <span> &#37;</span></p>
+            <p> <span>Speed of wind:</span> <span id="wind"></span> <span> miles/h</span></p>
+        </div>
+    </div>
+
+    <script>
+        
+        document.getElementById('submit-city').addEventListener('click', function(){
+            const writeCity = document.getElementById('write-city').value;
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${writeCity}&units=metric&appid=e23392413f98a7fdd7346b16fe74c169`)
+            .then( res => res.json())
+            .then( data => {
+                console.log(data);
+                const weatherIcon = data.weather[0].icon;
+                document.getElementById('icon').src = `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+                document.getElementById('city-name').innerText = writeCity;
+                document.getElementById('temp').innerText = parseInt(data.main.temp); 
+                document.getElementById('feels-like').innerText = data.main.feels_like; 
+                document.getElementById('sky').innerText = data.weather[0].main;
+                document.getElementById('sky-condition').innerText = data.weather[0].description;
+                document.getElementById('humidity').innerText = data.main.humidity;
+                document.getElementById('wind').innerText = data.wind.speed;
+            });
+            
+        });   
+    </script>
+</body>
+
+</html>
